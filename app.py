@@ -4,7 +4,6 @@ import io
 import streamlit as st
 import numpy as np
 from PIL import Image
-import tensorflow as tf
 import json
 import streamlit.components.v1 as components
 from streamlit_webrtc import webrtc_streamer
@@ -14,6 +13,7 @@ import time
 
 @st.cache_resource
 def load_model():
+    import tensorflow as tf
     return tf.keras.models.load_model("final_model.h5", compile=False)
 
 def load_labels():
