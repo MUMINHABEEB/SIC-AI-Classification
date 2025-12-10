@@ -1,4 +1,5 @@
 import os
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
 import io
 import streamlit as st
 import numpy as np
@@ -75,7 +76,14 @@ def main():
                     if record_enabled:
                         shared["frames"].append(img.copy())
             return frame
-        ctx = webrtc_streamer(key="live-video", video_frame_callback=video_frame_callback, media_stream_constraints={"video": True, "audio": False})
+        ctx = webrtc_streamer(
+            key="live-video",
+            video_frame_callback=video_frame_callback,
+            media_stream_constraints={"video": True, "audio": False},
+            rtc_configuration={
+                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+            },
+        )
         live_label = st.empty()
         while ctx.state.playing:
             with lock:
